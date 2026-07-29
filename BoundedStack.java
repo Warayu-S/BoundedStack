@@ -50,10 +50,12 @@ public class BoundedStack {
      * @throws IllegalArgumentException ถ้าความจุที่ส่งเข้ามาน้อยกว่า 0
      */
     public BoundedStack(int capacity) {
+        if(capacity < 0) {
+            throw new IllegalArgumentException("Capacity cannot be negative");
+        }
         this.capacity = capacity;
         this.size = 0;
         this.elements = new int[capacity];
-
         checkRep();
     }
 
@@ -66,7 +68,12 @@ public class BoundedStack {
      * @throws IllegalStateException ถ้าพยายามเพิ่มข้อมูลในขณะที่ Stack เต็มความจุเเล้ว (เรียกใช้ตอน isFull() เป็น true)
      */
     public void push(int e) {
-        // TODO: รอเขียนโค้ดการทำงาน
+        if (isFull()) {
+            throw new IllegalStateException("Stack is full");
+        }
+        elements[size] = e;
+        size++;
+        checkRep();
     }
 
     /**
@@ -76,7 +83,13 @@ public class BoundedStack {
      * @throws IllegalStateException ถ้าพยายามดึงข้อมูลในขณะที่ Stack ว่างเปล่า (เรียกใช้ตอน isEmpty() เป็น true)
      */
     public int pop() {
-        return 0; // TODO: รอเขียนโค้ดการทำงาน
+        if (isEmpty()) {
+            throw new IllegalStateException("Stack is empty");
+        }
+        int value = elements[size -1];
+        size--;
+        checkRep();
+        return value;
     }
 
     // ===== Observers =====
@@ -88,7 +101,10 @@ public class BoundedStack {
      * @throws IllegalStateException ถ้าพยายามดูข้อมูลในขณะที่ Stack ว่างเปล่า (เรียกใช้ตอน isEmpty() เป็น true)
      */
     public int peek() {
-        return 0; // TODO: รอเขียนโค้ดการทำงาน
+        if (isEmpty()){
+            throw new IllegalStateException("Stack is empty");
+        }
+        return elements[size-1]; 
     }
 
     /**
@@ -97,7 +113,7 @@ public class BoundedStack {
      * @return จำนวนข้อมูลปัจจุบัน มีค่าตั้งเเต่ 0 ถึง capacity
      */
     public int size() {
-        return 0; // TODO: รอเขียนโค้ดการทำงาน
+        return size; 
     }
 
     /**
@@ -106,7 +122,7 @@ public class BoundedStack {
      * @return ความจุสูงสุดของ Stack
      */
     public int capacity() {
-        return 0; // TODO: รอเขียนโค้ดการทำงาน
+        return capacity; 
     }
 
     /**
@@ -115,7 +131,7 @@ public class BoundedStack {
      * @return true ถ้าไม่มีข้อมูลอยู่เลยใน Stack, false ถ้ามีข้อมูลอยู่อย่างน้อย 1 ตัว
      */
     public boolean isEmpty() {
-        return true; // TODO: รอเขียนโค้ดการทำงาน
+        return size == 0; 
     }
 
     /**
@@ -124,7 +140,7 @@ public class BoundedStack {
      * @return true ถ้าจำนวนข้อมูลเท่ากับความจุสูงสุดแล้ว, false ถ้ายังมีพื้นที่เหลือให้ push เพิ่มได้
      */
     public boolean isFull() {
-        return false; // TODO: รอเขียนโค้ดการทำงาน
+        return size == capacity; 
     }
 
     // ===== Producer =====
@@ -136,7 +152,14 @@ public class BoundedStack {
      *
      * @return BoundedStack ออบเจกต์ใหม่ที่คัดลอกข้อมูลมาจากตัวปัจจุบันอย่างสมบูรณ์
      */
+
     public BoundedStack copy() {
-        return null; // TODO: รอเขียนโค้ดการทำงาน
+        BoundedStack newStack = new BoundedStack(capacity);
+        for (int i = 0; i < this.size; i++) {
+        newStack.elements[i] = this.elements[i];
+    }
+        newStack.size = this.size;
+        newStack.checkRep();
+        return newStack; 
     }
 }
