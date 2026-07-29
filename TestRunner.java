@@ -1,5 +1,6 @@
+import java.util.Stack;
+
 /**
- * 
  * TestRunner สำหรับ BoundedStack
  * จัดโครงสร้างแบบแยกเมธอดตามกลุ่มการทดสอบ
  */
@@ -28,7 +29,8 @@ public class TestRunner {
             System.out.println("WARNING: assertions disabled" + " - re-run with: java -ea TestRunner\n");
         }
 
-        // รันชุดทดสอบทีละหมวดหมู่
+        System.out.println("\n=== BoundedStack Test Suite ===");
+        // รันชุดทดสอบหมวดหมู่
         testCreators();
         testMutatorsAndObservers();
         testExceptions();
@@ -36,7 +38,7 @@ public class TestRunner {
         testProducer();
 
         // สรุปผลคะแนนรวมตอนท้าย
-        System.out.println("\n=== Summary ===");
+        System.out.println("=== Summary ===");
         System.out.println("Passed: " + passed);
         System.out.println("Failed: " + failed);
         System.out.println(" Total: " + (passed + failed));
@@ -46,34 +48,87 @@ public class TestRunner {
     }
 
 
-    // 1. หมวด Creators: ทดสอบสถานะเริ่มต้นหลังจากใช้คำสั่ง new สร้าง Object
+    // ---------------------------------------------------------
+    // 1. หมวด Creators & Initial States
+    // ---------------------------------------------------------
     private static void testCreators() {
-        System.out.println("-- 1. Creators & Initial States --");
+        System.out.println("\n-- 1. Creators & Initial States --");
+
+        // Arrange & Act: สร้าง 
+        BoundedStack stack = new BoundedStack(3);
+
+        check("new(3) -> capacity is 3", stack.capacity() == 3);     
+        check("new() -> size = 0", stack.size() == 0);     
+        check("new() -> is empty", stack.isEmpty() == true);
+        check("new() -> is not full", stack.isFull() == false);
 
     }
 
-    // 2. หมวด Mutators & Observers: ทดสอบการเปลี่ยนแปลงข้อมูล (push/pop) 
-    // และสังเกตผลลัพธ์ว่าตรงตามหลักการ LIFO (เข้าหลังสุด ออกก่อนสุด) หรือไม่
+    // ---------------------------------------------------------
+    // 2. หมวด Mutators & Observers
+    // --------------------------------------------------------
     private static void testMutatorsAndObservers() {
         System.out.println("\n-- 2. Mutators & Observers --");
+
+        BoundedStack stack = new BoundedStack(3);
+
+        stack.push(10);
+        check("push 1 item -> size is 1", stack.size() == 1);
+        check("push 1 item -> isEmpty is false", stack.isEmpty() == false); 
+        check("push 1 item -> peek is 10", stack.peek() == 10);
+
+        stack.push(20);
+        stack.push(30);
+
+        check("push until full -> isFull is true", stack.isFull());
+        check("stack is full -> size is capacity", stack.size() == stack.capacity());
+
+        int topItem = stack.peek();
+        check("peek -> no side effect", stack.size() == 3 && stack.peek() == topItem);
+
+        int popped1 = stack.pop();
+        check("pop -> gets last item", popped1 == 30);
+        check("pop -> size decreases", stack.size() == 2);
+
+        int poped2 = stack.pop();
+        check("pop twice -> gets previous item", poped2 == 20);
+
+        stack.pop();
+        check("pop all -> isEmpty is true", stack.isEmpty());
     }
 
-    // 3. หมวด Exceptions: ทดสอบการป้องกันข้อผิดพลาด เมื่อโปรแกรมถูกสั่งให้ทำสิ่งที่ผิดกฎหมายของ Stack (ล้น หรือ ว่างเปล่า)
+    // ---------------------------------------------------------
+    // 3. หมวด Exception Handling
+    // ---------------------------------------------------------
     private static void testExceptions() {
         System.out.println("\n-- 3. Exception Handling --");
-        
+        // TODO: รอเขียน
     }
 
-    // 4. หมวด Boundaries: ทดสอบขอบเขตสุดโต่งของ Capacity (0 และ ติดลบ) 
-    // เพื่อดูว่าโปรแกรมรับมือกับเคสแปลกๆ ได้อย่างรัดกุมหรือไม่
+    // ---------------------------------------------------------
+    // 4. หมวด Capacity Boundaries
+    // ---------------------------------------------------------
     private static void testBoundaries() {
         System.out.println("\n-- 4. Capacity Boundaries --");
+        // TODO: รอเขียน
     }
 
-    // 5. หมวด Producer: ทดสอบการทำโคลนนิ่ง (Defensive Copy) 
-    // ตัวใหม่ที่ถูกก๊อปปี้ออกมา ต้องเป็นอิสระต่อกัน (แก้ตัวหนึ่ง ต้องไม่กระทบอีกตัว)
+    // ---------------------------------------------------------
+    // 5. หมวด Producer (Defensive Copy)
+    // ---------------------------------------------------------
     private static void testProducer() {
         System.out.println("\n-- 5. Producer (Defensive Copy) --");
+
+        BoundedStack original = new BoundedStack(3);
+        original.push(1);
+        original.push(2);
+
+        BoundedStack copy = original.copy();
+        check("copy -> gets new instance", original != copy);
+        check("copy -> size and capacity are same", copy.size() == original.size() && copy.capacity() == original.capacity());
+
+        original.push(3);
+        check("change original -> copy is unchanged", copy.size() == 2 && original.size() == 3);
     }
 } 
 
