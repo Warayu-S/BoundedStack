@@ -52,7 +52,7 @@
 }
 ```
 ## ผลลัพธ์การ Test 
-
+```
 =========================
       TEST SUMMARY
 =========================
@@ -61,13 +61,15 @@ Failed : 0
 Total  : 23
 =========================
   - ALL TESTS PASSED -
+```
 
 ## สรุปชุดทดสอบอัตโนมัติ (Automated Test Suite)
-  1.Creators & Initial States: ตรวจสอบความจุและสถานะเริ่มต้นหลังสร้างวัตถุ (capacity, size = 0, isEmpty = true, isFull = false)
-  2.Mutators & Observers: ตรวจสอบการทำงานของ push, pop, peek ลำดับข้อมูลแบบ LIFO และการทำงานของ Observer ที่ต้องไม่มี Side-Effect
-  3.Exception Handling: ตรวจสอบการพยายาม push ใส่ Stack ที่เต็มแล้ว หรือการ pop/peek จาก Stack ที่ว่างเปล่า
-  4.Capacity Boundaries: ตรวจสอบสภาวะขอบเขต เช่น Stack ที่มีความจุเป็น 0 และการป้องกันการสร้าง Stack ด้วยความจุติดลบ
-  5.Producer (Defensive Copy): ตรวจสอบว่า copy() สร้าง Instance ใหม่ที่มีข้อมูลเหมือนกัน แต่แยก Memory เป็นอิสระจากกันจริง
+
+1. **Creators & Initial States:** ตรวจสอบความจุและสถานะเริ่มต้นหลังสร้างวัตถุ (`capacity`, `size = 0`, `isEmpty = true`, `isFull = false`)
+2. **Mutators & Observers:** ตรวจสอบการทำงานของ `push`, `pop`, `peek` ลำดับข้อมูลแบบ LIFO และการทำงานของ Observer ที่ต้องไม่มี Side-Effect
+3. **Exception Handling:** ตรวจสอบการพยายาม `push` ใส่ Stack ที่เต็มแล้ว หรือการ `pop`/`peek` จาก Stack ที่ว่างเปล่า
+4. **Capacity Boundaries:** ตรวจสอบสภาวะขอบเขต เช่น Stack ที่มีความจุเป็น 0 และการป้องกันการสร้าง Stack ด้วยความจุติดลบ
+5. **Producer (Defensive Copy):** ตรวจสอบว่า `copy()` สร้าง Instance ใหม่ที่มีข้อมูลเหมือนกัน แต่แยก Memory เป็นอิสระจากกันจริง
 
 
 ## Contributors
