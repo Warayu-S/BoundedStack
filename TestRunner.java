@@ -1,5 +1,3 @@
-import java.util.Stack;
-
 /**
  * TestRunner สำหรับ BoundedStack
  * จัดโครงสร้างแบบแยกเมธอดตามกลุ่มการทดสอบ
@@ -46,7 +44,6 @@ public class TestRunner {
 
         if (failed > 0) System.exit(1);
     }
-
 
     // ---------------------------------------------------------
     // 1. หมวด Creators & Initial States
@@ -102,7 +99,37 @@ public class TestRunner {
     // ---------------------------------------------------------
     private static void testExceptions() {
         System.out.println("\n-- 3. Exception Handling --");
-        // TODO: รอเขียน
+
+        // Test push() on full stack = เทส การเพิ่มของ บน Stack ที่เต็มแล้ว
+        BoundedStack fullStack = new BoundedStack(1);
+        fullStack.push(99);
+        boolean threwPushFull = false;
+        try {
+            fullStack.push(100); 
+        } catch (IllegalStateException e) {
+            threwPushFull = true;
+        }
+        check("push when full -> throw exception", threwPushFull);
+
+        // Test pop() on empty stack = เทส การลบของ บน Stack ที่ว่างเปล่า
+        BoundedStack emptyStack = new BoundedStack(2);
+        boolean threwPopEmpty = false;
+        try {
+            emptyStack.pop();
+        } catch (IllegalStateException e) {
+            threwPopEmpty = true;
+        }
+        check("pop on empty stack -> throw exception", threwPopEmpty);
+
+        // Test peek() on empty stack = เทส การอ่าน บน Stack ที่ว่างเปล่า
+        boolean threwPeekEmpty = false;
+        try {
+            emptyStack.peek();
+            
+        } catch (IllegalStateException e) {
+            threwPeekEmpty = true;
+        }
+        check("peek on empty stack -> throws Exception", threwPeekEmpty);
     }
 
     // ---------------------------------------------------------
@@ -110,7 +137,20 @@ public class TestRunner {
     // ---------------------------------------------------------
     private static void testBoundaries() {
         System.out.println("\n-- 4. Capacity Boundaries --");
-        // TODO: รอเขียน
+        
+        // ทดสอบขอบเขตการสร้างความจุต่ำสุดที่เป็นไปได้
+        BoundedStack zeroStack = new BoundedStack(0);
+        check("new stack(0) -> capacity is 0", zeroStack.capacity() == 0);
+        check("new stack(0) -> isFull is true", zeroStack.isFull());
+
+        boolean threwNegativeCapacity = false;
+        try {
+            new BoundedStack(-5);
+        } catch (IllegalArgumentException e) {
+            threwNegativeCapacity = true;
+        }
+        check("new stack(-5) -> throws exception", threwNegativeCapacity);
+
     }
 
     // ---------------------------------------------------------
