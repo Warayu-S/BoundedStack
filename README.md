@@ -1,58 +1,42 @@
-# BIG LAB: BoundedStack
-01418211 Software Construction
----
+# Lab — สร้าง ADT: BoundedStack
 
-## ภาพรวมโปรเจกต์ (Overview)
-โปรเจกต์นี้เป็นการพัฒนา Abstract Data type (ADT) คลาส ** BoundedStack ** : 
-ซึ่งเป็นโครงสร้างข้อมูลแบบ Stack ที่เก็บข้อมูลชิด 'int' และมีการจำกัดความจุสูงสุด (Bounded Capacity)
+**วิชา:** 01418211 Software Construction
+**หัวข้อ:** Abstract Data Types (ADTs), Abstraction Function, Representation Invariant
 
 ---
 
-## แนวคิดการออกแบบ (Design & Architecture Highlights)
-** Representation & Encapsulation : เก็ชข้อมูลภายในด้วย 'int[]' และ 'size' โดยตั้งค่าเป็น 'private Final' ทั้งหมด Client ไม่สามารถเข้าถึงหรือแก้ไขข้อมูลภายในโดยตรงได้
+## เป้าหมาย
 
-**Representation Invarient (RI) & 'checkRep()' : มีการระบุ RI ที่ชัดเจนเหนือ private fields และเรียกใช้ 'checkRep()' หลังจากการเปลี่ยนแปลงสถานะทุกครั้งเพื่อการันตีความถูกต้องภายในวัตถุ
+สร้าง ADT ชื่อ `BoundedStack` ที่ทำหน้าที่เป็นโครงสร้างข้อมูลแบบสแตกซึ่งเก็บข้อมูลตัวเลข (`int`) โดยมีการจำกัดความจุสูงสุด โดยต้อง:
 
-**Defensive Copying : เมธอด 'copy()' คัดลอกสร้าง Objectใหม่ที่มีตำแหน่งหน่วยความจำ แยกจากเดิมโดยสิ้นเชิง การแก้ไขต้นฉบับจะไม่มีผลกระทบต่อตัวที่คัดลอกออกไป
+1. ระบุการดำเนินการให้ครบทั้ง 4 บทบาท (Creators / Producers / Observers / Mutators)
+2. เขียน Abstraction Function (AF) และ Representation Invariant (RI)
+3. เขียนเมธอด `checkRep()` ด้วย assertions
+4. ป้องกัน Representation Exposure ทั้งขาเข้าและขาออก
+5. ทดสอบให้ครอบคลุม รวมถึงเคส Boundary และ Exception
 
-**Exception Handling : แยกแยะความผิดพลาดอย่างเป็นระบบ
-  * ใช้ Exception ('IllegalStateException' , 'IllegalArgumentException') จัดการเงื่อนไขที่ผิดพลาดจาก Client
-  * ใช้ Assertion ('assert') ตรวจสอบความถูกต้องภายในโครงสร้าง ('checkRep()') เท่านั้น
+---
 
-## Design Document : BoundedStack
-1. Specification & Operation Roles
-* **Creator:** `BoundedStack(int capacity)`
-  * *Precondition:* `capacity >= 0`
-  * *Postcondition:* สร้าง Stack ว่างที่มีความจุตามระบุ
-  * *Exception:* โยน `IllegalArgumentException` ถ้า `capacity < 0`
-* **Mutator:**
-  * `push(int e)`: เพิ่มข้อมูลลงบนยอดสุด (โยน `IllegalStateException` ถ้า Stack เต็ม)
-  * `pop()`: ดึงและลบข้อมูลบนสุดออก (โยน `IllegalStateException` ถ้า Stack ว่าง)
-* **Observer:**
-  * `peek()`: ดูข้อมูลบนสุดโดยไม่ลบออก (โยน `IllegalStateException` ถ้า Stack ว่าง)
-  * `size()`, `capacity()`, `isEmpty()`, `isFull()`: คืนค่าสถานะของ Stack (ไม่มี Side-effect)
-* **Producer:**
-  * `copy()`: คืนค่า `BoundedStack` วัตถุใหม่ (Defensive Copy) โดยมีข้อมูลและขนาดเท่าเดิม แต่แยก Memory กันโดยสิ้นเชิง
+## ไฟล์ในโฟลเดอร์นี้
 
-## 2. Design Decisions & Trade-offs
-* **Representation Choice:** เลือกใช้ `int[]` ร่วมกับ `size` เนื่องจากเข้าถึงข้อมูลดรรชนีได้รวดเร็ว $O(1)$ ใช้พื้นที่คงที่ ไม่สร้าง Overhead เหมือนวัตถุWrapper
-* **Mutable vs Immutable:** เลือกแบบ **Mutable** เพราะเหมาะกับพฤติกรรมธรรมชาติของ Stack ที่ต้องมีการ push/pop ข้อมูลบ่อยๆ
-* **Error Handling Strategy:**
-  * ใช้ **Exception** (`IllegalStateException`, `IllegalArgumentException`) สำหรับจัดการข้อผิดพลาดจาก Client
-  * ใช้ **Assertion** (`checkRep()`) ภายในคลาส เพื่อตรวจสอบความถูกต้องของ Representation Invariant (RI) เท่านั้น
+| ไฟล์ | คำอธิบาย |
+|---|---|
+| `BoundedStack.java` | โค้ดหลักของ ADT พร้อม JavaDoc อธิบายสเปก (D1)|
+| `TestRunner.java` | ชุดทดสอบอัตโนมัติ 23 เคส เขียนด้วยสไตล์ AAA Pattern (D2)|
+| `README.md` | ไฟล์นี้ (D3)|
 
-
-## วิธี compile และรัน
+---
 
 **ตั้งค่าใน VSCode** ให้เปิด `-ea` อัตโนมัติ — เพิ่มใน `.vscode/settings.json`:
-
 ```json
 {
   "java.debug.settings.vmArgs": "-ea"
 }
 ```
-## ผลลัพธ์การ Test 
-```
+
+เมื่อทำเสร็จถูกต้องทั้งหมดจะได้ผลลัพธ์แบบนี้
+
+```text
 =========================
       TEST SUMMARY
 =========================
@@ -63,14 +47,37 @@ Total  : 23
   - ALL TESTS PASSED -
 ```
 
-## สรุปชุดทดสอบอัตโนมัติ (Automated Test Suite)
+> ข้อความที่โปรแกรมพิมพ์ออกมาเป็นภาษาอังกฤษทั้งหมด เพื่อเลี่ยงปัญหา
+> console บน Windows แสดงภาษาไทยเพี้ยน ส่วนคอมเมนต์ในโค้ดยังเป็นภาษาไทยตามเดิม
 
-1. **Creators & Initial States:** ตรวจสอบความจุและสถานะเริ่มต้นหลังสร้างวัตถุ (`capacity`, `size = 0`, `isEmpty = true`, `isFull = false`)
-2. **Mutators & Observers:** ตรวจสอบการทำงานของ `push`, `pop`, `peek` ลำดับข้อมูลแบบ LIFO และการทำงานของ Observer ที่ต้องไม่มี Side-Effect
-3. **Exception Handling:** ตรวจสอบการพยายาม `push` ใส่ Stack ที่เต็มแล้ว หรือการ `pop`/`peek` จาก Stack ที่ว่างเปล่า
-4. **Capacity Boundaries:** ตรวจสอบสภาวะขอบเขต เช่น Stack ที่มีความจุเป็น 0 และการป้องกันการสร้าง Stack ด้วยความจุติดลบ
-5. **Producer (Defensive Copy):** ตรวจสอบว่า `copy()` สร้าง Instance ใหม่ที่มีข้อมูลเหมือนกัน แต่แยก Memory เป็นอิสระจากกันจริง
+> **หมายเหตุเรื่องสไตล์โค้ด:** ชุดทดสอบเขียนด้วยไวยากรณ์ Java พื้นฐานเท่านั้น
+> ห้ามใช้ Framework การตรวจ exception ใช้ `try` / `catch` ตรง ๆ 
 
+---
+
+## สเปคของ ADT
+
+### ค่านามธรรม (A)
+
+สแตกที่จุตัวเลขได้ตามจำนวนความจุสูงสุด โดยทำงานแบบ LIFO (Last-In, First-Out) — ข้อมูลที่ใส่เข้ามาล่าสุด จะถูกนำออกไปใช้งานเป็นตัวแรกเสมอ
+
+### Representation (R)
+
+```java
+private final int[] elements;
+private int size;
+private final int capacity;
+```
+
+### กฎที่ BoundedStack ต้องรักษาไว้เสมอ
+
+- ความจุต้องไม่ติดลบ (`capacity >= 0`)
+- ต้องมีการจองพื้นที่อาเรย์ไว้ใช้งานจริง (`elements != null`)
+- ขนาดของอาเรย์ที่จองไว้ต้องตรงกับความจุที่ตั้งไว้ (`elements.length == capacity`)
+- จำนวนข้อมูลปัจจุบันต้องอยู่ในขอบเขตที่กำหนด (`0 <= size <= capacity`)
+- ข้อมูลจัดเก็บเรียงชิดกันตั้งแต่ index 0 เป็นต้นไป (ไม่เว้นช่องว่าง)
+
+---
 
 ## Contributors
 
