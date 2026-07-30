@@ -1,17 +1,30 @@
 /**
  * BoundedStack - ADT แทนโครงสร้างข้อมูลเเบบสเเตก Stack ที่เก็บข้อมูลเป็นรูปแบบของ int โดยจำกัดความจุสูงสุด
  * <p>
+ * หลักการทำงานคล้ายกับ "ซองใส่กระสุนปืน" หรือ "การซ้อนจาน" (LIFO: Last-In, First-Out)
+ * ข้อมูลที่ใส่เข้าไปล่าสุด จะถูกดึงออกมาใช้งานเป็นตัวแรก
+ * </p>
+ * <p><b>คำสั่งพื้นฐานที่สำคัญ:</b></p>
+ * <ul>
+ *  <li><b>push(x)</b>: "ใส่ของ" ลงไปทับไว้บนสุดของ Stack (ระวัง: ถ้าใส่จนเกินความจุจะเกิด Error)</li>
+ *  <li><b>pop()</b>: "หยิบของ" ที่อยู่บนสุดออกมาใช้งาน (ข้อมูลจะถูกลบออกไปจาก Stack ด้วย)</li>
+ *  <li><b>peek()</b>:"แอบดู" ข้อมูลตัวบนสุด ว่าคือเลขอะไร (ข้อมูลยังอยู่ที่เดิม ไม่โดนลบ)</li>
+ * </ul>
+ * <p>
  * <b>ตัวอย่างการใช้งาน:</b>
  * <pre>
  * <code>
  * BoundedStack stack = new BoundedStack(5);
  * stack.push(10);
  * stack.push(20);
- * System.out.println(stack.pop()); // 20
- * System.out.println(stack.size()); // 1
+ * 
+ * System.out.println(stack.peek());    // 20 พิมพ์ 20 (แค่ดูเฉยๆ ของยังอยู่ 2 ชิ้น)
+ * System.out.println(stack.pop());     // 20 พิมพ์ 20 (หยิบ 20 ออกมาทิ้งไป ของเหลือ 1 ชิ้น)
+ * System.out.println(stack.size());    // 1  พิมพ์ 1  (ตอนนี้เหลือแค่เลข 10 ตัวเดียว)
  * </code>
  * </pre>
  */
+
 public class BoundedStack {
 
     // ===== Representation =====
@@ -156,7 +169,7 @@ public class BoundedStack {
     public BoundedStack copy() {
         BoundedStack newStack = new BoundedStack(capacity);
         for (int i = 0; i < this.size; i++) {
-        newStack.elements[i] = this.elements[i];
+            newStack.elements[i] = this.elements[i];
     }
         newStack.size = this.size;
         newStack.checkRep();
