@@ -19,6 +19,13 @@ public class TestRunner {
     }
 
     public static void main(String[] args) {
+
+        // ตรวจสอบการเปิด -ea (Assertions) เพื่อให้แน่ใจว่า checkRep() ได้ทำงาน
+        boolean assertsOn = false;
+        assert assertsOn = true;
+        if (!assertsOn) {
+            System.out.println("\nWARNING: assertions disabled" + " - re-run with: java -ea TestRunner");
+        }
         
         System.out.println("\n=== BoundedStack Test Suite ===");
 
@@ -120,7 +127,7 @@ public class TestRunner {
 
         // Act
         try {
-            fullStack.push(100); 
+            fullStack.push(100);
         } catch (IllegalStateException e) {
             threwPushFull = true;
         }
