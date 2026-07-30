@@ -29,6 +29,12 @@
 
 เมื่อทำเสร็จถูกต้องทั้งหมด และรันผ่านคำสั่ง `java -ea TestRunner` จะได้ผลลัพธ์แบบนี้
 
+```json
+{
+  "java.debug.settings.vmArgs": "-ea"
+}
+```
+
 ```text
 =========================
       TEST SUMMARY
